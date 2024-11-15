@@ -1,3 +1,11 @@
+/* Colors */
+:root {
+  --light-green: #dff2eb;
+  --light-cyan: #b9e5e8;
+  --medium-blue: #7ab2d3;
+  --dark-blue: #4a628a;
+}
+
 /* Universal Reset */
 *,
 *::before,
@@ -22,6 +30,6 @@ body {
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: #dff2eb !important;
-  color: #4a628a !important;
+  background-color: var(--light-green) !important;
+  color: var(--dark-blue) !important;
 }
