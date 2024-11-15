@@ -4,6 +4,7 @@ import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import ValidationErrors from "../../../interfaces/ValidationErrors";
@@ -33,6 +34,7 @@ const StyledSubmitButton = styled(Button)`
 function RegistrationForm() {
   const { register, handleSubmit } = useForm<RegistrationFormInputs>();
 
+  const navigate = useNavigate();
   const mutation = useRegister();
 
   const registrationErrors: ValidationErrors = (mutation.error as AxiosError)
@@ -40,7 +42,9 @@ function RegistrationForm() {
 
   const onSubmit: SubmitHandler<RegistrationFormInputs> = (data) => {
     mutation.mutate(data, {
-      onSuccess: () => {},
+      onSuccess: () => {
+        navigate("/registration-success");
+      },
       onError: (error) => {
         const response = (error as AxiosError).response;
         if (response?.status === 400) {

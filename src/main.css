@@ -4,6 +4,10 @@
   --light-cyan: #b9e5e8;
   --medium-blue: #7ab2d3;
   --dark-blue: #4a628a;
+  --success: #46ce91;
+  --error: #e46b67;
+  --warning: #f1b25b;
+  --info: #5bc0de;
 }
 
 /* Universal Reset */

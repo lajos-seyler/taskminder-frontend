@@ -5,6 +5,7 @@ import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import RegistrationSuccess from "./pages/RegistrationSuccess";
 
 const queryClient = new QueryClient();
 
@@ -15,7 +16,11 @@ function App() {
         <Routes>
           <Route index element={<Navigate to="/login" />} />
           <Route path="login" element={<Login />} />
-          <Route path="register" element={<Register />} />{" "}
+          <Route path="register" element={<Register />} />
+          <Route
+            path="registration-success"
+            element={<RegistrationSuccess />}
+          />
         </Routes>
       </BrowserRouter>
     </QueryClientProvider>
