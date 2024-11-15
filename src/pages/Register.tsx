@@ -19,9 +19,7 @@ function Register() {
       <StyledCard>
         <Card.Body>
           <StyledCardTitle>Create a new account</StyledCardTitle>
-          <Card.Text>
-            <RegistrationForm />
-          </Card.Text>
+          <RegistrationForm />
         </Card.Body>
       </StyledCard>
     </>
