@@ -3,6 +3,14 @@ import styled from "styled-components";
 
 import RegistrationForm from "../features/users/components/RegistrationForm";
 
+const StyledRegister = styled.div`
+  height: 100%;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const StyledCard = styled(Card)`
   text-align: center;
   color: var(--dark-blue);
@@ -16,14 +24,14 @@ const StyledCardTitle = styled(Card.Title)`
 
 function Register() {
   return (
-    <>
+    <StyledRegister>
       <StyledCard>
         <Card.Body>
           <StyledCardTitle>Create a new account</StyledCardTitle>
           <RegistrationForm />
         </Card.Body>
       </StyledCard>
-    </>
+    </StyledRegister>
   );
 }
 
