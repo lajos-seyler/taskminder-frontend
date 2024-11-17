@@ -3,6 +3,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 
+import ActivateUser from "./pages/ActivateUser";
 import Login from "./pages/Login";
 import PageNotFound from "./pages/PageNotFound";
 import Register from "./pages/Register";
@@ -21,6 +22,10 @@ function App() {
           <Route
             path="registration-success"
             element={<RegistrationSuccess />}
+          />
+          <Route
+            path="users/activate/:uuid/:token"
+            element={<ActivateUser />}
           />
 
           <Route path="*" element={<PageNotFound />} />
