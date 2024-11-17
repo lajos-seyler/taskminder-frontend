@@ -31,7 +31,7 @@ function RegistrationSuccess() {
 
   return (
     <StyledRegistrationSuccess>
-      <StyledH2>REGISTRATION SUCCESS</StyledH2>
+      <StyledH2>Registration Success</StyledH2>
       <RegistrationSuccessCard />
       <StyledButton onClick={() => navigate("/login")}>Login</StyledButton>
     </StyledRegistrationSuccess>
