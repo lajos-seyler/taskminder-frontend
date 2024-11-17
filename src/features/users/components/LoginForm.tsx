@@ -8,6 +8,7 @@ import ValidationErrors from "../../../interfaces/ValidationErrors";
 import Button from "../../../ui/Button";
 import FormFeedback from "../../../ui/FormFeedback";
 import { errorValidationState } from "../../../utils/errorValidationState";
+import useAuthStore from "../hooks/useAuthStore";
 import useLogin from "../hooks/useLogin";
 import LoginFormInputs from "../interfaces/LoginFormInputs";
 
@@ -22,6 +23,7 @@ const StyledFormFeedback = styled(FormFeedback)`
 
 function LoginForm() {
   const { register, handleSubmit } = useForm<LoginFormInputs>();
+  const { setToken } = useAuthStore();
 
   const navigate = useNavigate();
   const mutation = useLogin();
@@ -32,7 +34,7 @@ function LoginForm() {
   const onSubmit: SubmitHandler<LoginFormInputs> = (data) => {
     mutation.mutate(data, {
       onSuccess: (responseData) => {
-        console.log(responseData);
+        setToken(responseData.access);
       },
     });
   };
