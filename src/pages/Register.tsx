@@ -4,6 +4,7 @@ import styled from "styled-components";
 import RegistrationForm from "../features/users/components/RegistrationForm";
 
 const StyledCard = styled(Card)`
+  text-align: center;
   color: var(--dark-blue);
   background-color: var(--light-cyan);
   margin: 0.5rem;
