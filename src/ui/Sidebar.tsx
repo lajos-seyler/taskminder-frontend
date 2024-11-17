@@ -9,6 +9,7 @@ import { Menu, MenuItem, Sidebar, sidebarClasses } from "react-pro-sidebar";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
+import { useLogout } from "../features/users/hooks/useLogout";
 import SidebarHeader from "./SidebarHeader";
 
 const StyledSidebar = styled(Sidebar)`
@@ -17,6 +18,7 @@ const StyledSidebar = styled(Sidebar)`
 
 function TaskMinderSidebar() {
   const [collapsed, setCollapsed] = useState(false);
+  const { logout } = useLogout();
 
   return (
     <StyledSidebar
@@ -48,7 +50,9 @@ function TaskMinderSidebar() {
       </div>
       <Menu>
         <MenuItem icon={<BsFillGearFill />}>Settings</MenuItem>
-        <MenuItem icon={<BsArrowRightSquare />}>Logout</MenuItem>
+        <MenuItem icon={<BsArrowRightSquare />} onClick={() => logout()}>
+          Logout
+        </MenuItem>
       </Menu>
     </StyledSidebar>
   );

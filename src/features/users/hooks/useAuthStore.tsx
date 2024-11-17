@@ -14,7 +14,7 @@ const useAuthStore = create<AuthState>((set) => ({
     set({
       user,
     }),
-  logout: async () => set({ token: "" }),
+  logout: async () => set({ token: "", user: undefined }),
 }));
 
 export default useAuthStore;
