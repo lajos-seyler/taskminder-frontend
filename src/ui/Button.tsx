@@ -53,18 +53,20 @@ const InfoButton = styled(BaseButton)`
 `;
 
 interface ButtonProps {
-  type: "primary" | "secondary" | "success" | "warning" | "error" | "info";
+  type: "button" | "reset" | "submit";
+  variant: "primary" | "secondary" | "success" | "warning" | "error" | "info";
   onClick?: () => void;
 }
 
 function Button({
-  type = "primary",
+  type = "button",
+  variant = "primary",
   children,
   onClick,
 }: PropsWithChildren<ButtonProps>) {
   let StyledButton;
 
-  switch (type) {
+  switch (variant) {
     case "secondary":
       StyledButton = SecondaryButton;
       break;
@@ -84,7 +86,11 @@ function Button({
       StyledButton = PrimaryButton;
   }
 
-  return <StyledButton onClick={onClick}>{children}</StyledButton>;
+  return (
+    <StyledButton type={type} onClick={onClick}>
+      {children}
+    </StyledButton>
+  );
 }
 
 export default Button;
