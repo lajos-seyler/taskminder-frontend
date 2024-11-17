@@ -1,5 +1,4 @@
 import { AxiosError } from "axios";
-import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
@@ -8,6 +7,7 @@ import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import ValidationErrors from "../../../interfaces/ValidationErrors";
+import Button from "../../../ui/Button";
 import FormFeedback from "../../../ui/FormFeedback";
 import { errorValidationState } from "../../../utils/errorValidationState";
 import useRegister from "../hooks/useRegister";
@@ -19,16 +19,6 @@ const StyledRegistrationForm = styled(Form)`
 
 const StyledSubmitButton = styled(Button)`
   margin-top: 1rem;
-
-  color: var(--dark-blue);
-  background-color: var(--light-green);
-  border-color: var(--dark-blue);
-
-  &:hover {
-    color: var(--light-green);
-    background-color: var(--dark-blue);
-    border-color: var(--light-green);
-  }
 `;
 
 function RegistrationForm() {
@@ -117,7 +107,20 @@ function RegistrationForm() {
         </Col>
       </Row>
 
-      <StyledSubmitButton type="submit">Register</StyledSubmitButton>
+      <StyledSubmitButton type="submit" variant="primary">
+        Register
+      </StyledSubmitButton>
+      <hr />
+      <div>
+        <p>Already have an account?</p>
+        <Button
+          type="button"
+          variant="secondary"
+          onClick={() => navigate("/login")}
+        >
+          Login
+        </Button>
+      </div>
     </StyledRegistrationForm>
   );
 }
