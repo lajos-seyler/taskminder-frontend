@@ -53,8 +53,8 @@ const InfoButton = styled(BaseButton)`
 `;
 
 interface ButtonProps {
-  type: "button" | "reset" | "submit";
-  variant: "primary" | "secondary" | "success" | "warning" | "error" | "info";
+  type?: "button" | "reset" | "submit";
+  variant?: "primary" | "secondary" | "success" | "warning" | "error" | "info";
   onClick?: () => void;
 }
 
