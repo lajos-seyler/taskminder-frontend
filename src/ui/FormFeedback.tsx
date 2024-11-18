@@ -5,17 +5,25 @@ import ValidationErrors from "../interfaces/ValidationErrors";
 
 interface FormFeedbackProps extends PropsWithChildren {
   errors: ValidationErrors;
-  fieldName: string;
+  fieldName?: string;
+  className?: string;
 }
 
-function FormFeedback({ errors, fieldName }: FormFeedbackProps) {
-  const hasError = errors?.[fieldName]?.length > 0;
-  const errorMessage = hasError ? errors?.[fieldName]?.[0] : "";
+function FormFeedback({ errors, fieldName, className }: FormFeedbackProps) {
+  const hasFieldError = fieldName && errors?.[fieldName]?.length > 0;
+  const fieldErrorMessage = hasFieldError ? errors?.[fieldName]?.[0] : "";
 
-  if (!hasError) return;
+  const hasGlobalError = !fieldName && errors?.detail;
+  const globalErrorMessage = hasGlobalError ? errors.detail : "";
+
+  const errorMessage = fieldErrorMessage || globalErrorMessage;
+
+  if (!errorMessage) return null;
 
   return (
-    <Form.Control.Feedback type="invalid">{errorMessage}</Form.Control.Feedback>
+    <Form.Control.Feedback type="invalid" className={className}>
+      {errorMessage}
+    </Form.Control.Feedback>
   );
 }
 

@@ -31,9 +31,12 @@ body {
 body {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   min-height: 100vh;
   background-color: var(--light-green) !important;
   color: var(--dark-blue) !important;
+}
+
+#root {
+  height: 100%;
+  width: 100%;
 }
