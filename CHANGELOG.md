@@ -1,3 +1,9 @@
+## 0.3.1 (2024-11-19)
+
+### Fix
+
+- scrolling issue on pages
+
 ## 0.3.0 (2024-11-18)
 
 ### Feat
