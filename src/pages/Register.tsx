@@ -4,11 +4,11 @@ import styled from "styled-components";
 import RegistrationForm from "../features/users/components/RegistrationForm";
 
 const StyledRegister = styled.div`
-  height: 100%;
-  width: 100%;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin: 3rem auto;
 `;
 
 const StyledCard = styled(Card)`

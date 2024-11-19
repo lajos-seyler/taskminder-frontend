@@ -19,24 +19,23 @@
   box-sizing: border-box; /* Includes padding and border in the element's width and height */
 }
 
-html,
 body {
-  height: 100%;
-  width: 100%;
-  font-family: sans-serif;
-  line-height: 1.5;
-  overflow-x: hidden;
-}
-
-body {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
+  margin: 0;
+  width: 100vw;
+  height: 100vh;
   background-color: var(--light-green) !important;
   color: var(--dark-blue) !important;
 }
 
 #root {
-  height: 100%;
-  width: 100%;
+  flex: 1;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: scroll;
+}
+
+#root::-webkit-scrollbar {
+  display: none;
 }
