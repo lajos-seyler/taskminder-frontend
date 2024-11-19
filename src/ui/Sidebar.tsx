@@ -5,11 +5,11 @@ import {
   BsFillHouseDoorFill,
 } from "react-icons/bs";
 import { BsListTask } from "react-icons/bs";
-import { Menu, MenuItem, Sidebar, sidebarClasses } from "react-pro-sidebar";
-import { Link } from "react-router-dom";
+import { Menu, Sidebar, sidebarClasses } from "react-pro-sidebar";
 import styled from "styled-components";
 
 import { useLogout } from "../features/users/hooks/useLogout";
+import MenuItem from "./MenuItem";
 import SidebarHeader from "./SidebarHeader";
 
 const StyledSidebar = styled(Sidebar)`
@@ -37,13 +37,10 @@ function TaskMinderSidebar() {
       <div>
         <SidebarHeader collapsed={collapsed} setCollapsed={setCollapsed} />
         <Menu>
-          <MenuItem
-            icon={<BsFillHouseDoorFill />}
-            component={<Link to="/app" />}
-          >
+          <MenuItem icon={<BsFillHouseDoorFill />} linkTo="/app">
             Dashboard
           </MenuItem>
-          <MenuItem icon={<BsListTask />} component={<Link to="/app/tasks" />}>
+          <MenuItem icon={<BsListTask />} linkTo="/app/tasks">
             Tasks
           </MenuItem>
         </Menu>
