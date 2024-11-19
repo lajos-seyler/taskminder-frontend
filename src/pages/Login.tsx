@@ -4,11 +4,14 @@ import styled from "styled-components";
 import LoginForm from "../features/users/components/LoginForm";
 
 const StyledLogin = styled.div`
-  height: 100%;
-  width: 100%;
+  flex: 1 1 0;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 3rem 0;
 `;
 
 const StyledCard = styled(Card)`

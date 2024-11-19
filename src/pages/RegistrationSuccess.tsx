@@ -5,7 +5,14 @@ import styled from "styled-components";
 import RegistrationSuccessCard from "../features/users/components/RegistrationSuccessCard";
 
 const StyledRegistrationSuccess = styled.div`
-  text-align: center;
+  flex: 1 1 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: auto;
+  margin-bottom: auto;
+  padding: 2rem 0;
 `;
 
 const StyledH2 = styled.h2`
