@@ -37,7 +37,11 @@ function ActivateUser() {
               </Card.Text>
             </Card.Body>
           </StyledSuccessCard>
-          <Button type="primary" onClick={() => navigate("/login")}>
+          <Button
+            type="button"
+            variant="primary"
+            onClick={() => navigate("/login")}
+          >
             Login
           </Button>
         </>
