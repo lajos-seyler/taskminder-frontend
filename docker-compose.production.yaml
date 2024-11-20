@@ -1,0 +1,11 @@
+services:
+  react:
+    build:
+      context: .
+      dockerfile: ./compose/production/Dockerfile
+    image: taskminder_production_react
+    container_name: taskminder_production_react
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3000:3000
