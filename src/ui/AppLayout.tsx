@@ -13,6 +13,7 @@ const StyledOutlet = styled.div`
   display: flex;
   flex-direction: column;
   padding: 1rem;
+  width: 100%;
 `;
 
 function AppLayout() {
