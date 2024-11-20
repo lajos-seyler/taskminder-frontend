@@ -1,3 +1,13 @@
+## 0.4.0 (2024-11-20)
+
+### Feat
+
+- mark active MenuItem with border
+
+### Fix
+
+- incorrect Button props in ActivateUser.tsx
+
 ## 0.3.1 (2024-11-19)
 
 ### Fix
