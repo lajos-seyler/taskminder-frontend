@@ -1,6 +1,8 @@
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { ReactTags, Tag } from "react-tag-autocomplete";
 
+import useCreateTag from "../hooks/useCreateTag";
+
 interface TagsInputProps {
   tags?: Tag[];
   selectedTags: Tag[];
@@ -12,11 +14,16 @@ function TagsInput({
   selectedTags,
   setSelectedTags,
 }: TagsInputProps) {
+  const createTag = useCreateTag({
+    onSuccess: (data) =>
+      setSelectedTags([...selectedTags, { value: data.id, label: data.name }]),
+  });
+
   const onAdd = useCallback(
     (newTag: Tag) => {
-      setSelectedTags([...selectedTags, newTag]);
+      createTag.mutate({ name: newTag.label });
     },
-    [selectedTags, setSelectedTags],
+    [createTag],
   );
 
   const onDelete = useCallback(

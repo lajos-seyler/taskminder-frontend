@@ -11,3 +11,8 @@ export async function getTags({
   );
   return response.data;
 }
+
+export async function createTag(tag: { name: string }) {
+  const response = await api.post("api/tags/", tag);
+  return response.data;
+}
