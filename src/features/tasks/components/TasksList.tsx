@@ -11,15 +11,18 @@ const StyledTaskList = styled.div`
 
 interface TaskListProps {
   paginatedTasks?: InfiniteData<TaskPages>;
+  onTaskSelect: (task: TaskType) => void;
 }
 
-function TasksList({ paginatedTasks }: TaskListProps) {
+function TasksList({ paginatedTasks, onTaskSelect }: TaskListProps) {
   const tasks: TaskType[] | undefined = paginatedTasks?.pages.flatMap(
     (page) => page.results,
   );
   return (
     <StyledTaskList>
-      {tasks?.map((task) => <Task key={task.id} task={task} />)}
+      {tasks?.map((task) => (
+        <Task key={task.id} task={task} onClick={() => onTaskSelect(task)} />
+      ))}
     </StyledTaskList>
   );
 }

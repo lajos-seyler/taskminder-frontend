@@ -43,6 +43,7 @@ const StyledTag = styled(Badge)`
 
 interface TaskProps {
   task: TaskType;
+  onClick: (task: TaskType) => void;
 }
 
 function Tags({ tags }: { tags?: Tag[] }) {
@@ -56,9 +57,9 @@ function Tags({ tags }: { tags?: Tag[] }) {
   );
 }
 
-function Task({ task }: TaskProps) {
+function Task({ task, onClick }: TaskProps) {
   return (
-    <StyledTask>
+    <StyledTask onClick={() => onClick(task)}>
       <StyledTaskTitle>{task.title}</StyledTaskTitle>
       <StyledTaskDetails>
         <Tags tags={task.tags} />

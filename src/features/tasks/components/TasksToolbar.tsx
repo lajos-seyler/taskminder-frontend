@@ -12,10 +12,14 @@ const StyledTasksToolbar = styled.div`
   padding-right: 1rem;
 `;
 
-function TasksToolbar() {
+interface TaskToolbarProps {
+  onAddClick: () => void;
+}
+
+function TasksToolbar({ onAddClick }: TaskToolbarProps) {
   return (
     <StyledTasksToolbar>
-      <Button type="button" variant="primary">
+      <Button type="button" variant="primary" onClick={onAddClick}>
         Add
       </Button>
     </StyledTasksToolbar>
