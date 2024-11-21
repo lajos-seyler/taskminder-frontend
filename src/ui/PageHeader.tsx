@@ -6,6 +6,7 @@ const StyledPageHeader = styled.h1`
   width: 100%;
   padding: 0.75rem 1.5rem;
   border-radius: 1rem;
+  font-size: 2rem;
 `;
 
 function PageHeader({ children }: PropsWithChildren) {
