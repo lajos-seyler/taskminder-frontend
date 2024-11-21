@@ -1,7 +1,8 @@
 import api from "../../../utils/api";
+import Task from "../interfaces/Task";
 import { TaskPages } from "../interfaces/TaskPages";
 
-export default async function getTasks({
+export async function getTasks({
   pageParam,
 }: {
   pageParam: { limit: number; offset: number };
@@ -9,5 +10,10 @@ export default async function getTasks({
   const response = await api.get(
     `api/tasks/?limit=${pageParam.limit}&offset=${pageParam.offset}`,
   );
+  return response.data;
+}
+
+export async function createTask(task: Task) {
+  const response = await api.post("/api/tasks/", task);
   return response.data;
 }

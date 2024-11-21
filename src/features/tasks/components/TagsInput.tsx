@@ -1,35 +1,38 @@
-import { Dispatch, useCallback } from "react";
+import { Dispatch, SetStateAction, useCallback } from "react";
 import { ReactTags, Tag } from "react-tag-autocomplete";
 
 interface TagsInputProps {
-  tags: Tag[];
-  setTags: Dispatch<React.SetStateAction<Tag[]>>;
+  tags?: Tag[];
+  selectedTags: Tag[];
+  setSelectedTags: Dispatch<SetStateAction<Tag[]>>;
 }
 
-function TagsInput({ tags, setTags }: TagsInputProps) {
-  const suggestions: Tag[] = [];
-
+function TagsInput({
+  tags = [],
+  selectedTags,
+  setSelectedTags,
+}: TagsInputProps) {
   const onAdd = useCallback(
     (newTag: Tag) => {
-      setTags([...tags, newTag]);
+      setSelectedTags([...selectedTags, newTag]);
     },
-    [tags, setTags],
+    [selectedTags, setSelectedTags],
   );
 
   const onDelete = useCallback(
     (tagIndex: number) => {
-      setTags(tags.filter((_, i) => i !== tagIndex));
+      setSelectedTags(selectedTags.filter((_, i) => i !== tagIndex));
     },
-    [tags, setTags],
+    [selectedTags, setSelectedTags],
   );
 
   return (
     <ReactTags
-      selected={tags}
-      suggestions={suggestions}
+      selected={selectedTags}
+      suggestions={tags}
+      allowNew={true}
       onAdd={onAdd}
       onDelete={onDelete}
-      allowNew={true}
     />
   );
 }
