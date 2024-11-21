@@ -1,7 +1,7 @@
-import { Badge } from "react-bootstrap";
 import { BsCalendarDateFill, BsFillTagsFill } from "react-icons/bs";
 import styled from "styled-components";
 
+import Badge from "../../../ui/Badge";
 import Tag from "../interfaces/Tag";
 import TaskType from "../interfaces/Task";
 
@@ -37,6 +37,10 @@ const StyledTags = styled.span`
   margin-right: 1rem;
 `;
 
+const StyledTag = styled(Badge)`
+  margin: 0 0.15rem;
+`;
+
 interface TaskProps {
   task: TaskType;
 }
@@ -47,11 +51,7 @@ function Tags({ tags }: { tags?: Tag[] }) {
   return (
     <StyledTags>
       <BsFillTagsFill />
-      {tags?.map((tag) => (
-        <Badge key={tag.id} style={{ margin: "0 0.15rem" }}>
-          {tag.name}
-        </Badge>
-      ))}
+      {tags?.map((tag) => <StyledTag key={tag.id}>{tag.name}</StyledTag>)}
     </StyledTags>
   );
 }
