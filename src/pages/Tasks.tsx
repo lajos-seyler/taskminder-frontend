@@ -7,6 +7,7 @@ import TasksList from "../features/tasks/components/TasksList";
 import TasksToolbar from "../features/tasks/components/TasksToolbar";
 import useTasks from "../features/tasks/hooks/useTasks";
 import Task from "../features/tasks/interfaces/Task";
+import Button from "../ui/Button";
 import PageHeader from "../ui/PageHeader";
 
 const StyledContainer = styled(Container)`
@@ -24,7 +25,7 @@ const ScrollableCol = styled(Col)`
 `;
 
 function Tasks() {
-  const { data: tasks } = useTasks();
+  const { data: tasks, fetchNextPage, hasNextPage } = useTasks();
 
   const [selectedTask, setSelectedTask] = useState<Task | null>(null);
   const [isAddingNew, setIsAddingNew] = useState<boolean>(false);
@@ -51,7 +52,9 @@ function Tasks() {
           <PageHeader>Tasks</PageHeader>
           <TasksToolbar onAddClick={handleAddNewClick} />
           <TasksList paginatedTasks={tasks} onTaskSelect={handleTaskSelect} />
+          {hasNextPage && <Button onClick={fetchNextPage}>Load more</Button>}
         </ScrollableCol>
+
         <ScrollableCol md="12" lg="4" xl="3">
           <TaskDetail
             selectedTask={selectedTask}

@@ -1,13 +1,21 @@
-import { useInfiniteQuery } from "@tanstack/react-query";
+import { InfiniteData, useInfiniteQuery } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 
 import { getNextPageParam } from "../../../utils/getNextPageParam";
+import { TaskPages } from "../interfaces/TaskPages";
 import getTasks from "../services/tasks";
 
-const useTasks = (query: string = "") =>
-  useInfiniteQuery({
-    queryKey: ["tasks", query],
+const useTasks = () =>
+  useInfiniteQuery<
+    TaskPages,
+    AxiosError,
+    InfiniteData<TaskPages>,
+    string[],
+    { limit: number; offset: number }
+  >({
+    queryKey: ["tasks"],
     queryFn: getTasks,
-    initialPageParam: 1,
+    initialPageParam: { limit: 25, offset: 0 },
     getNextPageParam: (lastPage) => getNextPageParam(lastPage),
   });
 
