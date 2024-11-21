@@ -32,9 +32,9 @@ function Tasks() {
           <TasksToolbar />
           <TasksList paginatedTasks={tasks} />
         </ScrollableCol>
-        <Col md="12" lg="4" xl="3">
+        <ScrollableCol md="12" lg="4" xl="3">
           <TaskDetail />
-        </Col>
+        </ScrollableCol>
       </StyledRow>
     </StyledContainer>
   );
