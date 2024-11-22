@@ -27,7 +27,8 @@ interface EditTaskFormProps {
 }
 
 function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [tags] = useState<Tag[]>([]);
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
   const { register, reset } = useForm<Task>({
     defaultValues: {
@@ -65,7 +66,11 @@ function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
         <hr />
         <Form.Group className="mb-3" controlId="tags">
           <Form.Label>Tags</Form.Label>
-          <TagsInput tags={tags} setTags={setTags} />
+          <TagsInput
+            tags={tags}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+          />
         </Form.Group>
         <hr />
         <StyledFormButtonsDiv>

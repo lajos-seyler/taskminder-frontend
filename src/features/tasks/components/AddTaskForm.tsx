@@ -2,7 +2,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
 import { useState } from "react";
 import { Form } from "react-bootstrap";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Tag } from "react-tag-autocomplete";
 import styled from "styled-components";
 
@@ -11,8 +11,11 @@ import Button from "../../../ui/Button";
 import FormFeedback from "../../../ui/FormFeedback";
 import { errorValidationState } from "../../../utils/errorValidationState";
 import useCreateTask from "../hooks/useCreateTask";
+import useProjects from "../hooks/useProjects";
 import useTags from "../hooks/useTags";
+import ProjectOption from "../interfaces/ProjectOption";
 import Task from "../interfaces/Task";
+import ProjectInput from "./ProjectInput";
 import TagsInput from "./TagsInput";
 
 const StyledAddTaskForm = styled(Form)`
@@ -46,8 +49,22 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
       return { label: tag.name, value: tag.id };
     });
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+
+  const { data: projectPages } = useProjects();
+  const projects: ProjectOption[] | undefined = projectPages?.pages
+    .flatMap((page) => page.results)
+    .map((project) => {
+      return {
+        label: `${project?.folder?.name ? project.folder.name + "/" : ""}${project.name}`,
+        value: project.id,
+      };
+    });
+  const [selectedProject, setSelectedProject] = useState<ProjectOption | null>(
+    null,
+  );
+
   const [globalError, setGlobalError] = useState<string>("");
-  const { register, handleSubmit } = useForm<Task>();
+  const { register, control, handleSubmit } = useForm<Task>();
 
   const queryClient = useQueryClient();
 
@@ -68,7 +85,11 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
 
   const onSubmit: SubmitHandler<Task> = function (data) {
     const tags = selectedTags.map((tag) => tag.value) as number[];
-    createTask.mutate({ ...data, tags: tags });
+    createTask.mutate({
+      ...data,
+      tags: tags,
+      project: selectedProject?.value || null,
+    });
   };
 
   return (
@@ -92,7 +113,18 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
         <hr />
         <Form.Group className="mb-3" controlId="project">
           <Form.Label>Project</Form.Label>
-          <Form.Control type="text" {...register("project")} />
+          <Controller
+            name="project"
+            control={control}
+            render={({ field }) => (
+              <ProjectInput
+                {...field}
+                options={projects}
+                selectedProject={selectedProject}
+                setSelectedProject={setSelectedProject}
+              />
+            )}
+          />
         </Form.Group>
         <hr />
         <Form.Group className="mb-3" controlId="tags">

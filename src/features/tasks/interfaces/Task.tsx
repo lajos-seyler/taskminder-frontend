@@ -5,6 +5,6 @@ export default interface Task {
   title: string;
   text: string;
   folder: number;
-  project: number;
+  project: number | null;
   tags: Array<Tag> | number[];
 }
