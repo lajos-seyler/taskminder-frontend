@@ -1,7 +1,9 @@
+import PageHeader from "../ui/PageHeader";
+
 function Dashboard() {
   return (
     <>
-      <h1>Dashboard</h1>
+      <PageHeader>Dashboard</PageHeader>
     </>
   );
 }

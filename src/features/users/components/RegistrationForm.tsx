@@ -35,13 +35,6 @@ function RegistrationForm() {
       onSuccess: () => {
         navigate("/registration-success");
       },
-      onError: (error) => {
-        const response = (error as AxiosError).response;
-        if (response?.status === 400) {
-          const validationErrors = response.data as ValidationErrors;
-          console.log(validationErrors);
-        }
-      },
     });
   };
 
