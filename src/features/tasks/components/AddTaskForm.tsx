@@ -1,11 +1,15 @@
 import { useQueryClient } from "@tanstack/react-query";
+import { AxiosError } from "axios";
 import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { Tag } from "react-tag-autocomplete";
 import styled from "styled-components";
 
+import ValidationErrors from "../../../interfaces/ValidationErrors";
 import Button from "../../../ui/Button";
+import FormFeedback from "../../../ui/FormFeedback";
+import { errorValidationState } from "../../../utils/errorValidationState";
 import useCreateTask from "../hooks/useCreateTask";
 import useTags from "../hooks/useTags";
 import Task from "../interfaces/Task";
@@ -23,6 +27,12 @@ const StyledFormButtonsDiv = styled.div`
   justify-content: space-around;
 `;
 
+const StyledFormFeedback = styled(FormFeedback)`
+  display: block;
+  margin-bottom: 1rem;
+  text-align: center;
+`;
+
 interface AddTaskFormProps {
   onSaveNewTask: () => void;
   onCancel: () => void;
@@ -36,6 +46,8 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
       return { label: tag.name, value: tag.id };
     });
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [globalError, setGlobalError] = useState<string>("");
+  const { register, handleSubmit } = useForm<Task>();
 
   const queryClient = useQueryClient();
 
@@ -44,10 +56,15 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
       onSaveNewTask();
       queryClient.invalidateQueries({ queryKey: ["tasks"] });
     },
-    onError: () => console.log("ERROR"),
+    onError: (error) => {
+      if (error.status !== 400) {
+        setGlobalError("Something went wrong. Please try again later.");
+      }
+    },
   });
 
-  const { register, handleSubmit } = useForm<Task>();
+  const createTaskErrors: ValidationErrors = (createTask.error as AxiosError)
+    ?.response?.data as ValidationErrors;
 
   const onSubmit: SubmitHandler<Task> = function (data) {
     const tags = selectedTags.map((tag) => tag.value) as number[];
@@ -61,7 +78,12 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
         <hr />
         <Form.Group className="mb-3" controlId="title">
           <Form.Label>Title</Form.Label>
-          <Form.Control type="text" {...register("title")} />
+          <Form.Control
+            type="text"
+            {...register("title")}
+            {...errorValidationState(createTaskErrors, "title")}
+          />
+          <FormFeedback errors={createTaskErrors} fieldName="title" />
         </Form.Group>
         <Form.Group className="mb-3" controlId="text">
           <Form.Label>Text</Form.Label>
@@ -82,6 +104,9 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
           />
         </Form.Group>
         <hr />
+        <StyledFormFeedback
+          errors={{ ...createTaskErrors, detail: [globalError] }}
+        />
         <StyledFormButtonsDiv>
           <Button variant="error" onClick={onCancel}>
             Cancel
