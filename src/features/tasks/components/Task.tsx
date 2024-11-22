@@ -62,7 +62,7 @@ function Task({ task, onClick }: TaskProps) {
     <StyledTask onClick={() => onClick(task)}>
       <StyledTaskTitle>{task.title}</StyledTaskTitle>
       <StyledTaskDetails>
-        <Tags tags={task.tags} />
+        <Tags tags={task.tags as Array<Tag>} />
         <BsCalendarDateFill />
         <span style={{ marginLeft: "0.5rem" }}>Due</span>
       </StyledTaskDetails>
