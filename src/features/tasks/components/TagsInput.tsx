@@ -21,9 +21,14 @@ function TagsInput({
 
   const onAdd = useCallback(
     (newTag: Tag) => {
-      createTag.mutate({ name: newTag.label });
+      const isNewTag = !tags.includes(newTag);
+      if (isNewTag) {
+        createTag.mutate({ name: newTag.label });
+      } else {
+        setSelectedTags([...selectedTags, newTag]);
+      }
     },
-    [createTag],
+    [tags, createTag, selectedTags, setSelectedTags],
   );
 
   const onDelete = useCallback(
