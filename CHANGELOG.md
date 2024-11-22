@@ -1,3 +1,23 @@
+## 0.5.0 (2024-11-22)
+
+### Feat
+
+- implement project select in AddTaskForm
+- handle errors for AddTaskForm
+- implement "Add tag" functionality while adding new task
+- implement createTask
+- implement pagination for tasks
+- implement UI TaskDetail sidebar
+- list existing tasks on Tasks page
+- implement initial layout of Tasks page
+
+### Fix
+
+- TypeScript error for tags prop on Tags component
+- update tag suggestions if new tag is created
+- only trigger tag creation if new tag is selected
+- remove unused onError from RegistrationForm
+
 ## 0.4.0 (2024-11-20)
 
 ### Feat
