@@ -1,3 +1,4 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { Dispatch, SetStateAction, useCallback } from "react";
 import { ReactTags, Tag } from "react-tag-autocomplete";
 
@@ -14,9 +15,13 @@ function TagsInput({
   selectedTags,
   setSelectedTags,
 }: TagsInputProps) {
+  const queryClient = useQueryClient();
+
   const createTag = useCreateTag({
-    onSuccess: (data) =>
-      setSelectedTags([...selectedTags, { value: data.id, label: data.name }]),
+    onSuccess: (data) => {
+      setSelectedTags([...selectedTags, { value: data.id, label: data.name }]);
+      queryClient.invalidateQueries({ queryKey: ["tags"] });
+    },
   });
 
   const onAdd = useCallback(
