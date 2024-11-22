@@ -5,7 +5,8 @@ import { Tag } from "react-tag-autocomplete";
 import styled from "styled-components";
 
 import Button from "../../../ui/Button";
-import Task from "../interfaces/Task";
+import { TaskInput, TaskResponse } from "../interfaces/Task";
+import { convertTaskResponseToInput } from "../utils/tasks";
 import TagsInput from "./TagsInput";
 
 const StyledEditTaskForm = styled(Form)`
@@ -23,14 +24,14 @@ const StyledFormButtonsDiv = styled.div`
 interface EditTaskFormProps {
   onSaveNewTask: () => void;
   onCancel: () => void;
-  task?: Task;
+  task?: TaskResponse;
 }
 
 function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
   const [tags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
-  const { register, reset } = useForm<Task>({
+  const { register, reset } = useForm<TaskInput>({
     defaultValues: {
       title: task?.title,
       text: task?.text,
@@ -38,7 +39,7 @@ function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
   });
 
   useEffect(() => {
-    reset({ ...task });
+    if (task) reset(convertTaskResponseToInput(task));
   }, [task, reset]);
 
   const handleSubmit = function () {
