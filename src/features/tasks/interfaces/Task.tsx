@@ -6,5 +6,12 @@ export default interface Task {
   text: string;
   folder: number;
   project: number | null;
-  tags: Array<Tag> | number[];
+}
+
+export interface TaskInput extends Task {
+  tags: number[];
+}
+
+export interface TaskResponse extends Task {
+  tags: Array<Tag>;
 }

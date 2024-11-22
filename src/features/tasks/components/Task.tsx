@@ -3,7 +3,7 @@ import styled from "styled-components";
 
 import Badge from "../../../ui/Badge";
 import Tag from "../interfaces/Tag";
-import TaskType from "../interfaces/Task";
+import { TaskResponse } from "../interfaces/Task";
 
 const StyledTask = styled.div`
   display: flex;
@@ -42,8 +42,8 @@ const StyledTag = styled(Badge)`
 `;
 
 interface TaskProps {
-  task: TaskType;
-  onClick: (task: TaskType) => void;
+  task: TaskResponse;
+  onClick: (task: TaskResponse) => void;
 }
 
 function Tags({ tags }: { tags?: Tag[] }) {

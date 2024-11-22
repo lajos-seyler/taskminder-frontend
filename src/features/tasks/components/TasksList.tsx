@@ -1,7 +1,7 @@
 import { InfiniteData } from "@tanstack/react-query";
 import styled from "styled-components";
 
-import TaskType from "../interfaces/Task";
+import { TaskResponse } from "../interfaces/Task";
 import { TaskPages } from "../interfaces/TaskPages";
 import Task from "./Task";
 
@@ -11,11 +11,11 @@ const StyledTaskList = styled.div`
 
 interface TaskListProps {
   paginatedTasks?: InfiniteData<TaskPages>;
-  onTaskSelect: (task: TaskType) => void;
+  onTaskSelect: (task: TaskResponse) => void;
 }
 
 function TasksList({ paginatedTasks, onTaskSelect }: TaskListProps) {
-  const tasks: TaskType[] | undefined = paginatedTasks?.pages.flatMap(
+  const tasks: TaskResponse[] | undefined = paginatedTasks?.pages.flatMap(
     (page) => page.results,
   );
   return (

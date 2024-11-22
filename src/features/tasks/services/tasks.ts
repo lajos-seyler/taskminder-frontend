@@ -1,5 +1,5 @@
 import api from "../../../utils/api";
-import Task from "../interfaces/Task";
+import { TaskInput } from "../interfaces/Task";
 import { TaskPages } from "../interfaces/TaskPages";
 
 export async function getTasks({
@@ -13,7 +13,7 @@ export async function getTasks({
   return response.data;
 }
 
-export async function createTask(task: Task) {
+export async function createTask(task: TaskInput) {
   const response = await api.post("/api/tasks/", task);
   return response.data;
 }
