@@ -1,11 +1,14 @@
+import { useQueryClient } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, SubmitHandler, useForm } from "react-hook-form";
 import { Tag } from "react-tag-autocomplete";
 import styled from "styled-components";
 
 import Button from "../../../ui/Button";
 import useProjects from "../hooks/useProjects";
+import useTags from "../hooks/useTags";
+import { useUpdateTask } from "../hooks/useUpdateTask";
 import ProjectOption from "../interfaces/ProjectOption";
 import { TaskInput, TaskResponse } from "../interfaces/Task";
 import { convertTaskResponseToInput } from "../utils/tasks";
@@ -31,8 +34,14 @@ interface EditTaskFormProps {
 }
 
 function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
-  const [tags] = useState<Tag[]>([]);
+  const { data: tagPages } = useTags();
+  const tags: Tag[] | undefined = tagPages?.pages
+    .flatMap((page) => page.results)
+    .map((tag) => {
+      return { label: tag.name, value: tag.id };
+    });
   const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const queryClient = useQueryClient();
 
   const { data: projectPages } = useProjects();
   const projects: ProjectOption[] | undefined = projectPages?.pages
@@ -47,11 +56,15 @@ function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
     null,
   );
 
-  const { register, reset, control } = useForm<TaskInput>({
+  const { register, reset, control, handleSubmit } = useForm<TaskInput>({
     defaultValues: {
       title: task?.title,
       text: task?.text,
     },
+  });
+
+  const updateTaskMutation = useUpdateTask({
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["tasks"] }),
   });
 
   useEffect(() => {
@@ -77,13 +90,20 @@ function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
     if (task) reset(convertTaskResponseToInput(task));
   }, [task, reset]);
 
-  const handleSubmit = function () {
+  if (!task) return;
+
+  const onSubmit: SubmitHandler<TaskInput> = function (data) {
+    const tags = selectedTags.map((tag) => tag.value) as number[];
+    updateTaskMutation.mutate({
+      data: { ...data, tags, project: selectedProject?.value || null },
+      taskId: task.id,
+    });
     onSaveNewTask();
   };
 
   return (
     <>
-      <StyledEditTaskForm>
+      <StyledEditTaskForm onSubmit={handleSubmit(onSubmit)}>
         <h3>Update Task</h3>
         <hr />
         <Form.Group className="mb-3" controlId="title">
@@ -124,7 +144,7 @@ function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
           <Button variant="error" onClick={onCancel}>
             Cancel
           </Button>
-          <Button variant="success" onClick={handleSubmit}>
+          <Button variant="success" onClick={handleSubmit(onSubmit)}>
             Save
           </Button>
         </StyledFormButtonsDiv>
