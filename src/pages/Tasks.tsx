@@ -48,7 +48,7 @@ function Tasks() {
   return (
     <StyledContainer fluid>
       <StyledRow>
-        <ScrollableCol md="12" lg="8" xl="9">
+        <ScrollableCol md="12" lg="7" xl="8" xxl="9">
           <PageHeader>Tasks</PageHeader>
           <TasksToolbar onAddClick={handleAddNewClick} />
           <TasksList
@@ -59,7 +59,7 @@ function Tasks() {
           {hasNextPage && <Button onClick={fetchNextPage}>Load more</Button>}
         </ScrollableCol>
 
-        <ScrollableCol md="12" lg="4" xl="3">
+        <ScrollableCol md="12" lg="5" xl="4" xxl="3">
           <TaskDetail
             selectedTask={selectedTask}
             isAddingNew={isAddingNew}
