@@ -51,7 +51,11 @@ function Tasks() {
         <ScrollableCol md="12" lg="8" xl="9">
           <PageHeader>Tasks</PageHeader>
           <TasksToolbar onAddClick={handleAddNewClick} />
-          <TasksList paginatedTasks={tasks} onTaskSelect={handleTaskSelect} />
+          <TasksList
+            paginatedTasks={tasks}
+            selectedTask={selectedTask}
+            onTaskSelect={handleTaskSelect}
+          />
           {hasNextPage && <Button onClick={fetchNextPage}>Load more</Button>}
         </ScrollableCol>
 

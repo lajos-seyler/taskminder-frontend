@@ -11,17 +11,31 @@ const StyledTaskList = styled.div`
 
 interface TaskListProps {
   paginatedTasks?: InfiniteData<TaskPages>;
+  selectedTask: TaskResponse | null;
   onTaskSelect: (task: TaskResponse) => void;
 }
 
-function TasksList({ paginatedTasks, onTaskSelect }: TaskListProps) {
+function TasksList({
+  paginatedTasks,
+  selectedTask,
+  onTaskSelect,
+}: TaskListProps) {
   const tasks: TaskResponse[] | undefined = paginatedTasks?.pages.flatMap(
     (page) => page.results,
   );
+
   return (
     <StyledTaskList>
       {tasks?.map((task) => (
-        <Task key={task.id} task={task} onClick={() => onTaskSelect(task)} />
+        <Task
+          key={task.id}
+          task={task}
+          onClick={() => onTaskSelect(task)}
+          {...(selectedTask &&
+            selectedTask.id === task.id && {
+              style: { backgroundColor: "var(--light-cyan)" },
+            })}
+        />
       ))}
     </StyledTaskList>
   );

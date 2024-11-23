@@ -1,3 +1,4 @@
+import { CSSProperties } from "react";
 import { BsCalendarDateFill, BsFillTagsFill } from "react-icons/bs";
 import styled from "styled-components";
 
@@ -44,6 +45,7 @@ const StyledTag = styled(Badge)`
 interface TaskProps {
   task: TaskResponse;
   onClick: (task: TaskResponse) => void;
+  style?: CSSProperties;
 }
 
 function Tags({ tags }: { tags?: Tag[] }) {
@@ -57,9 +59,9 @@ function Tags({ tags }: { tags?: Tag[] }) {
   );
 }
 
-function Task({ task, onClick }: TaskProps) {
+function Task({ task, onClick, style }: TaskProps) {
   return (
-    <StyledTask onClick={() => onClick(task)}>
+    <StyledTask onClick={() => onClick(task)} style={style}>
       <StyledTaskTitle>{task.title}</StyledTaskTitle>
       <StyledTaskDetails>
         <Tags tags={task.tags as Array<Tag>} />
