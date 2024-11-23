@@ -1,3 +1,4 @@
+import Project from "./Project";
 import Tag from "./Tag";
 
 export default interface Task {
@@ -5,13 +6,14 @@ export default interface Task {
   title: string;
   text: string;
   folder: number;
-  project: number | null;
 }
 
 export interface TaskInput extends Task {
+  project: number | null;
   tags: number[];
 }
 
 export interface TaskResponse extends Task {
+  project: Project;
   tags: Array<Tag>;
 }
