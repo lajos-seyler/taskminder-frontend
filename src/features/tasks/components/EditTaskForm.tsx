@@ -39,6 +39,14 @@ function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
   });
 
   useEffect(() => {
+    const taskTags = task?.tags.map((tag) => ({
+      label: tag.name,
+      value: tag.id,
+    }));
+    setSelectedTags(taskTags || []);
+  }, [task]);
+
+  useEffect(() => {
     if (task) reset(convertTaskResponseToInput(task));
   }, [task, reset]);
 
