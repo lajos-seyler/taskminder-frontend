@@ -14,7 +14,7 @@ import useCreateTask from "../hooks/useCreateTask";
 import useProjects from "../hooks/useProjects";
 import useTags from "../hooks/useTags";
 import ProjectOption from "../interfaces/ProjectOption";
-import Task from "../interfaces/Task";
+import { TaskInput } from "../interfaces/Task";
 import ProjectInput from "./ProjectInput";
 import TagsInput from "./TagsInput";
 
@@ -64,7 +64,7 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
   );
 
   const [globalError, setGlobalError] = useState<string>("");
-  const { register, control, handleSubmit } = useForm<Task>();
+  const { register, control, handleSubmit } = useForm<TaskInput>();
 
   const queryClient = useQueryClient();
 
@@ -83,7 +83,7 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
   const createTaskErrors: ValidationErrors = (createTask.error as AxiosError)
     ?.response?.data as ValidationErrors;
 
-  const onSubmit: SubmitHandler<Task> = function (data) {
+  const onSubmit: SubmitHandler<TaskInput> = function (data) {
     const tags = selectedTags.map((tag) => tag.value) as number[];
     createTask.mutate({
       ...data,

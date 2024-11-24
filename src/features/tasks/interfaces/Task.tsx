@@ -1,3 +1,5 @@
+import Occurrence from "./Occurrence";
+import Project from "./Project";
 import Tag from "./Tag";
 
 export default interface Task {
@@ -5,6 +7,15 @@ export default interface Task {
   title: string;
   text: string;
   folder: number;
+}
+
+export interface TaskInput extends Task {
   project: number | null;
-  tags: Array<Tag> | number[];
+  tags: number[];
+}
+
+export interface TaskResponse extends Task {
+  project: Project;
+  tags: Array<Tag>;
+  next_occurrence: Occurrence | null;
 }

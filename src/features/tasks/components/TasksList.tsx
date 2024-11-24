@@ -1,7 +1,7 @@
 import { InfiniteData } from "@tanstack/react-query";
 import styled from "styled-components";
 
-import TaskType from "../interfaces/Task";
+import { TaskResponse } from "../interfaces/Task";
 import { TaskPages } from "../interfaces/TaskPages";
 import Task from "./Task";
 
@@ -11,17 +11,31 @@ const StyledTaskList = styled.div`
 
 interface TaskListProps {
   paginatedTasks?: InfiniteData<TaskPages>;
-  onTaskSelect: (task: TaskType) => void;
+  selectedTask: TaskResponse | null;
+  onTaskSelect: (task: TaskResponse) => void;
 }
 
-function TasksList({ paginatedTasks, onTaskSelect }: TaskListProps) {
-  const tasks: TaskType[] | undefined = paginatedTasks?.pages.flatMap(
+function TasksList({
+  paginatedTasks,
+  selectedTask,
+  onTaskSelect,
+}: TaskListProps) {
+  const tasks: TaskResponse[] | undefined = paginatedTasks?.pages.flatMap(
     (page) => page.results,
   );
+
   return (
     <StyledTaskList>
       {tasks?.map((task) => (
-        <Task key={task.id} task={task} onClick={() => onTaskSelect(task)} />
+        <Task
+          key={task.id}
+          task={task}
+          onClick={() => onTaskSelect(task)}
+          {...(selectedTask &&
+            selectedTask.id === task.id && {
+              style: { backgroundColor: "var(--light-cyan)" },
+            })}
+        />
       ))}
     </StyledTaskList>
   );

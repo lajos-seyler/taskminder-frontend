@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-import Task from "../interfaces/Task";
+import { TaskResponse } from "../interfaces/Task";
 import AddTaskForm from "./AddTaskForm";
 import EditTaskForm from "./EditTaskForm";
 
@@ -14,11 +14,10 @@ const StyledTaskDetail = styled.div`
 `;
 
 interface TaskDetailProps {
-  selectedTask: Task | null;
+  selectedTask: TaskResponse | null;
   isAddingNew: boolean;
   onSaveNewTask: () => void;
   onCancel: () => void;
-  task?: Task;
 }
 
 function TaskDetail({
@@ -26,7 +25,6 @@ function TaskDetail({
   isAddingNew,
   onSaveNewTask,
   onCancel,
-  task,
 }: TaskDetailProps) {
   return (
     <StyledTaskDetail>
@@ -37,7 +35,7 @@ function TaskDetail({
         <EditTaskForm
           onSaveNewTask={onSaveNewTask}
           onCancel={onCancel}
-          task={task}
+          task={selectedTask}
         />
       )}
       {!isAddingNew && !selectedTask && <>No item(s) selected</>}

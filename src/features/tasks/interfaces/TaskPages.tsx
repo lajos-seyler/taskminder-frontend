@@ -1,8 +1,8 @@
-import Task from "./Task";
+import { TaskResponse } from "./Task";
 
 export interface TaskPages {
   count: number;
   next: string | null;
   previous: string | null;
-  results: Task[];
+  results: TaskResponse[];
 }
