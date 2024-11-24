@@ -27,3 +27,7 @@ export async function updateTask({
 }): Promise<TaskResponse> {
   return await api.patch(`/api/tasks/${taskId}/`, data);
 }
+
+export async function deleteTask(taskId: number) {
+  return await api.delete(`/api/tasks/${taskId}/`);
+}

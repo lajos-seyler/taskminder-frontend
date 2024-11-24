@@ -1,3 +1,4 @@
+import Occurrence from "./Occurrence";
 import Project from "./Project";
 import Tag from "./Tag";
 
@@ -16,4 +17,5 @@ export interface TaskInput extends Task {
 export interface TaskResponse extends Task {
   project: Project;
   tags: Array<Tag>;
+  next_occurrence: Occurrence | null;
 }
