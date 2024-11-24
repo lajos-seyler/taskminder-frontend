@@ -1,3 +1,11 @@
+## 0.6.0 (2024-11-24)
+
+### Feat
+
+- implement delete task functionality
+- mark selected task in TaskList
+- implement update task feature
+
 ## 0.5.0 (2024-11-22)
 
 ### Feat
