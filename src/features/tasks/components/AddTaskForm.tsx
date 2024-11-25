@@ -18,6 +18,7 @@ import { TaskInput } from "../interfaces/Task";
 import OccurrencesInput from "./OccurrencesInput";
 import ProjectInput from "./ProjectInput";
 import TagsInput from "./TagsInput";
+import TimeRangeInput from "./TimeRangeInput";
 
 const StyledAddTaskForm = styled(Form)`
   width: 100%;
@@ -138,6 +139,7 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
           />
         </Form.Group>
         <hr />
+        <TimeRangeInput />
         <OccurrencesInput />
         <hr />
         <StyledFormFeedback
