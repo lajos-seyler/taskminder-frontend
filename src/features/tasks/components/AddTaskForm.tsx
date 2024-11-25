@@ -15,6 +15,7 @@ import useProjects from "../hooks/useProjects";
 import useTags from "../hooks/useTags";
 import ProjectOption from "../interfaces/ProjectOption";
 import { TaskInput } from "../interfaces/Task";
+import OccurrencesInput from "./OccurrencesInput";
 import ProjectInput from "./ProjectInput";
 import TagsInput from "./TagsInput";
 
@@ -42,15 +43,19 @@ interface AddTaskFormProps {
 }
 
 function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
+  const { data: projectPages } = useProjects();
   const { data: tagPages } = useTags();
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedProject, setSelectedProject] = useState<ProjectOption | null>(
+    null,
+  );
+
   const tags: Tag[] | undefined = tagPages?.pages
     .flatMap((page) => page.results)
     .map((tag) => {
       return { label: tag.name, value: tag.id };
     });
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
-  const { data: projectPages } = useProjects();
   const projects: ProjectOption[] | undefined = projectPages?.pages
     .flatMap((page) => page.results)
     .map((project) => {
@@ -59,9 +64,6 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
         value: project.id,
       };
     });
-  const [selectedProject, setSelectedProject] = useState<ProjectOption | null>(
-    null,
-  );
 
   const [globalError, setGlobalError] = useState<string>("");
   const { register, control, handleSubmit } = useForm<TaskInput>();
@@ -135,6 +137,8 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
             setSelectedTags={setSelectedTags}
           />
         </Form.Group>
+        <hr />
+        <OccurrencesInput />
         <hr />
         <StyledFormFeedback
           errors={{ ...createTaskErrors, detail: [globalError] }}
