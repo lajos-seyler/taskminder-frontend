@@ -1,3 +1,4 @@
+import { Dispatch, SetStateAction } from "react";
 import { Form } from "react-bootstrap";
 import styled from "styled-components";
 
@@ -18,21 +19,44 @@ const StyledDateTimeContainer = styled.div`
   gap: 0.5rem;
 `;
 
-export default function TimeRangeInput() {
+interface TimeRangeInputProps {
+  setStartDate: Dispatch<SetStateAction<string>>;
+  setStartTime: Dispatch<SetStateAction<string>>;
+  setEndDate: Dispatch<SetStateAction<string>>;
+  setEndTime: Dispatch<SetStateAction<string>>;
+}
+export default function TimeRangeInput({
+  setStartDate,
+  setStartTime,
+  setEndDate,
+  setEndTime,
+}: TimeRangeInputProps) {
   return (
     <StyledTimeRangeInput>
       <StyledDateTimeContainer>
         <Form.Label>Start&nbsp;Time</Form.Label>
         <span style={{ display: "flex", gap: "0.5rem" }}>
-          <Form.Control type="date" />
-          <Form.Control type="time" />
+          <Form.Control
+            type="date"
+            onChange={(e) => setStartDate(e.target.value)}
+          />
+          <Form.Control
+            type="time"
+            onChange={(e) => setStartTime(e.target.value)}
+          />
         </span>
       </StyledDateTimeContainer>
       <StyledDateTimeContainer>
         <Form.Label>End&nbsp;Time</Form.Label>
         <span style={{ display: "flex", gap: "0.5rem" }}>
-          <Form.Control type="date" />
-          <Form.Control type="time" />
+          <Form.Control
+            type="date"
+            onChange={(e) => setEndDate(e.target.value)}
+          />
+          <Form.Control
+            type="time"
+            onChange={(e) => setEndTime(e.target.value)}
+          />
         </span>
       </StyledDateTimeContainer>
     </StyledTimeRangeInput>

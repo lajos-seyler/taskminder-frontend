@@ -1,5 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import moment from "moment";
 import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -50,6 +51,10 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
   const [selectedProject, setSelectedProject] = useState<ProjectOption | null>(
     null,
   );
+  const [startDate, setStartDate] = useState<string>("");
+  const [startTime, setStartTime] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
 
   const tags: Tag[] | undefined = tagPages?.pages
     .flatMap((page) => page.results)
@@ -88,11 +93,31 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
 
   const onSubmit: SubmitHandler<TaskInput> = function (data) {
     const tags = selectedTags.map((tag) => tag.value) as number[];
-    createTask.mutate({
+
+    const startDateTime = `${startDate} ${startTime}`;
+    const endDateTime = `${endDate} ${endTime}`;
+
+    const startDateTimeIsValid = moment(
+      startDateTime,
+      "YYYY-MM-DD HH:mm",
+    ).isValid();
+    const endDateTimeIsValid = moment(
+      endDateTime,
+      "YYYY-MM-DD HH:mm",
+    ).isValid();
+
+    const taskData = {
       ...data,
       tags: tags,
       project: selectedProject?.value || null,
-    });
+    };
+
+    if (startDateTimeIsValid && endDateTimeIsValid) {
+      taskData["start_time"] = startDateTime;
+      taskData["end_time"] = endDateTime;
+    }
+
+    createTask.mutate(taskData);
   };
 
   return (
@@ -139,7 +164,12 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
           />
         </Form.Group>
         <hr />
-        <TimeRangeInput />
+        <TimeRangeInput
+          setStartDate={setStartDate}
+          setStartTime={setStartTime}
+          setEndDate={setEndDate}
+          setEndTime={setEndTime}
+        />
         <OccurrencesInput />
         <hr />
         <StyledFormFeedback
