@@ -1,8 +1,11 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { Form, InputGroup } from "react-bootstrap";
+import { UseFormRegister } from "react-hook-form";
 import styled from "styled-components";
 
 import Badge from "../../../ui/Badge";
+import { toggleWeekday } from "../../../utils/date";
+import { TaskInput } from "../interfaces/Task";
 
 const StyledIntervalContainer = styled.div`
   display: flex;
@@ -49,8 +52,28 @@ const StyledRepeatEndsChoiceContainer = styled.div`
   margin: 0.5rem 0;
 `;
 
-export default function OccurrencesInput() {
+const StyledBadge = styled(Badge)`
+  cursor: pointer;
+`;
+
+interface OccurrencesInputParams {
+  register: UseFormRegister<TaskInput>;
+  byweekday: number[];
+  setByweekday: Dispatch<SetStateAction<number[]>>;
+}
+
+export default function OccurrencesInput({
+  register,
+  byweekday,
+  setByweekday,
+}: OccurrencesInputParams) {
   const [isRepeating, setIsRepeating] = useState<boolean>(false);
+
+  console.log(byweekday);
+
+  const handleWeekdayClick = (weekdayNumber: number) => {
+    setByweekday((prevWeekdays) => toggleWeekday(prevWeekdays, weekdayNumber));
+  };
 
   return (
     <>
@@ -65,8 +88,12 @@ export default function OccurrencesInput() {
           {isRepeating && (
             <>
               <span>every</span>
-              <Form.Control type="number" min={1} />
-              <Form.Select>
+              <Form.Control
+                type="number"
+                min={1}
+                {...register("rrule_params.interval")}
+              />
+              <Form.Select {...register("rrule_params.freq")}>
                 <option value="DAILY">day</option>
                 <option value="WEEKLY">week</option>
                 <option value="MONTHLY">month</option>
@@ -83,7 +110,13 @@ export default function OccurrencesInput() {
               <span>Repeat&nbsp;on</span>
               <StyledRepeatOnBadgesContainer>
                 {["M", "T", "W", "T", "F", "S", "S"].map((day, i) => (
-                  <Badge key={i}>{day}</Badge>
+                  <StyledBadge
+                    key={i}
+                    onClick={() => handleWeekdayClick(i)}
+                    bg={byweekday.includes(i) ? "info" : "primary"}
+                  >
+                    {day}
+                  </StyledBadge>
                 ))}
               </StyledRepeatOnBadgesContainer>
             </StyledRepeatOnContainer>
@@ -99,22 +132,34 @@ export default function OccurrencesInput() {
                 type="radio"
                 label="Never"
                 id="Never"
-                name="repeatsOn"
+                value={"never"}
+                {...register("rrule_params.ends_on")}
               />
             </StyledRepeatEndsChoiceContainer>
             <StyledRepeatEndsChoiceContainer>
-              <Form.Check type="radio" label="On" id="On" name="repeatsOn" />
-              <Form.Control type="date" />
+              <Form.Check
+                type="radio"
+                label="On"
+                id="On"
+                value={"date"}
+                {...register("rrule_params.ends_on")}
+              />
+              <Form.Control type="date" {...register("rrule_params.until")} />
             </StyledRepeatEndsChoiceContainer>
             <StyledRepeatEndsChoiceContainer>
               <Form.Check
                 type="radio"
                 label="After"
                 id="After"
-                name="repeatsOn"
+                value={"count"}
+                {...register("rrule_params.ends_on")}
               />
               <InputGroup className="mb-3">
-                <Form.Control type="number" min={1} />
+                <Form.Control
+                  type="number"
+                  min={1}
+                  {...register("rrule_params.count")}
+                />
                 <InputGroup.Text>occurrences</InputGroup.Text>
               </InputGroup>
             </StyledRepeatEndsChoiceContainer>

@@ -2,20 +2,14 @@ import Occurrence from "./Occurrence";
 import Project from "./Project";
 import Tag from "./Tag";
 
-interface RruleParamsBase {
+interface RruleParams {
   freq: "DAILY" | "WEEKLY" | "MONTHLY" | "YEARLY";
-  interval: number;
+  interval: number | string;
+  ends_on?: "never" | "date" | "count";
+  count?: number | string;
+  until?: string;
+  byweekday?: number[];
 }
-
-interface RruleParamsWithCount extends RruleParamsBase {
-  count: number;
-}
-
-interface RruleParamsWithUntil extends RruleParamsBase {
-  until: Date;
-}
-
-type RruleParams = RruleParamsWithCount | RruleParamsWithUntil;
 
 export default interface Task {
   id: number;

@@ -24,7 +24,7 @@ import TimeRangeInput from "./TimeRangeInput";
 const StyledAddTaskForm = styled(Form)`
   width: 100%;
   align-self: flex-start;
-  margin: 1.5rem;
+  padding: 1rem 0 1rem 1rem;
 `;
 
 const StyledFormButtonsDiv = styled.div`
@@ -55,6 +55,7 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
   const [startTime, setStartTime] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
   const [endTime, setEndTime] = useState<string>("");
+  const [byweekday, setByweekday] = useState<number[]>([]);
 
   const tags: Tag[] | undefined = tagPages?.pages
     .flatMap((page) => page.results)
@@ -117,6 +118,26 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
       taskData["end_time"] = endDateTime;
     }
 
+    if (
+      byweekday.length &&
+      taskData.rrule_params &&
+      Object.keys(taskData.rrule_params).length
+    ) {
+      taskData.rrule_params.byweekday = byweekday;
+    }
+
+    if (data.rrule_params?.ends_on != "count") delete data.rrule_params?.count;
+    if (data.rrule_params?.ends_on != "date") delete data.rrule_params?.until;
+
+    if (typeof data.rrule_params?.interval === "string") {
+      data.rrule_params.interval = parseInt(data.rrule_params.interval);
+    }
+    if (typeof data.rrule_params?.count === "string") {
+      data.rrule_params.count = parseInt(data.rrule_params.count);
+    }
+
+    delete data.rrule_params?.ends_on;
+
     createTask.mutate(taskData);
   };
 
@@ -170,7 +191,11 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
           setEndDate={setEndDate}
           setEndTime={setEndTime}
         />
-        <OccurrencesInput />
+        <OccurrencesInput
+          register={register}
+          byweekday={byweekday}
+          setByweekday={setByweekday}
+        />
         <hr />
         <StyledFormFeedback
           errors={{ ...createTaskErrors, detail: [globalError] }}
