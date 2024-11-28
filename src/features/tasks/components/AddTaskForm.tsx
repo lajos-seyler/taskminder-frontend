@@ -1,5 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { AxiosError } from "axios";
+import moment from "moment";
 import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -15,13 +16,15 @@ import useProjects from "../hooks/useProjects";
 import useTags from "../hooks/useTags";
 import ProjectOption from "../interfaces/ProjectOption";
 import { TaskInput } from "../interfaces/Task";
+import OccurrencesInput from "./OccurrencesInput";
 import ProjectInput from "./ProjectInput";
 import TagsInput from "./TagsInput";
+import TimeRangeInput from "./TimeRangeInput";
 
 const StyledAddTaskForm = styled(Form)`
   width: 100%;
   align-self: flex-start;
-  margin: 1.5rem;
+  padding: 1rem 0 1rem 1rem;
 `;
 
 const StyledFormButtonsDiv = styled.div`
@@ -42,15 +45,24 @@ interface AddTaskFormProps {
 }
 
 function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
+  const { data: projectPages } = useProjects();
   const { data: tagPages } = useTags();
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedProject, setSelectedProject] = useState<ProjectOption | null>(
+    null,
+  );
+  const [startDate, setStartDate] = useState<string>("");
+  const [startTime, setStartTime] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
+  const [byweekday, setByweekday] = useState<number[]>([]);
+
   const tags: Tag[] | undefined = tagPages?.pages
     .flatMap((page) => page.results)
     .map((tag) => {
       return { label: tag.name, value: tag.id };
     });
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
 
-  const { data: projectPages } = useProjects();
   const projects: ProjectOption[] | undefined = projectPages?.pages
     .flatMap((page) => page.results)
     .map((project) => {
@@ -59,9 +71,6 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
         value: project.id,
       };
     });
-  const [selectedProject, setSelectedProject] = useState<ProjectOption | null>(
-    null,
-  );
 
   const [globalError, setGlobalError] = useState<string>("");
   const { register, control, handleSubmit } = useForm<TaskInput>();
@@ -85,11 +94,51 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
 
   const onSubmit: SubmitHandler<TaskInput> = function (data) {
     const tags = selectedTags.map((tag) => tag.value) as number[];
-    createTask.mutate({
+
+    const startDateTime = `${startDate} ${startTime}`;
+    const endDateTime = `${endDate} ${endTime}`;
+
+    const startDateTimeIsValid = moment(
+      startDateTime,
+      "YYYY-MM-DD HH:mm",
+    ).isValid();
+    const endDateTimeIsValid = moment(
+      endDateTime,
+      "YYYY-MM-DD HH:mm",
+    ).isValid();
+
+    const taskData = {
       ...data,
       tags: tags,
       project: selectedProject?.value || null,
-    });
+    };
+
+    if (startDateTimeIsValid && endDateTimeIsValid) {
+      taskData["start_time"] = startDateTime;
+      taskData["end_time"] = endDateTime;
+    }
+
+    if (
+      byweekday.length &&
+      taskData.rrule_params &&
+      Object.keys(taskData.rrule_params).length
+    ) {
+      taskData.rrule_params.byweekday = byweekday;
+    }
+
+    if (data.rrule_params?.ends_on != "count") delete data.rrule_params?.count;
+    if (data.rrule_params?.ends_on != "date") delete data.rrule_params?.until;
+
+    if (typeof data.rrule_params?.interval === "string") {
+      data.rrule_params.interval = parseInt(data.rrule_params.interval);
+    }
+    if (typeof data.rrule_params?.count === "string") {
+      data.rrule_params.count = parseInt(data.rrule_params.count);
+    }
+
+    delete data.rrule_params?.ends_on;
+
+    createTask.mutate(taskData);
   };
 
   return (
@@ -135,6 +184,18 @@ function AddTaskForm({ onSaveNewTask, onCancel }: AddTaskFormProps) {
             setSelectedTags={setSelectedTags}
           />
         </Form.Group>
+        <hr />
+        <TimeRangeInput
+          setStartDate={setStartDate}
+          setStartTime={setStartTime}
+          setEndDate={setEndDate}
+          setEndTime={setEndTime}
+        />
+        <OccurrencesInput
+          register={register}
+          byweekday={byweekday}
+          setByweekday={setByweekday}
+        />
         <hr />
         <StyledFormFeedback
           errors={{ ...createTaskErrors, detail: [globalError] }}

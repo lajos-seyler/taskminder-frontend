@@ -20,3 +20,15 @@ export function formatDate(dateString: string): string {
     return `${day}/${month}/${year}`;
   }
 }
+
+export function toggleWeekday(weekdays: number[], day: number) {
+  if (day < 0 || day > 6) {
+    throw new Error("Invalid day. Please provide a number between 0 and 6.");
+  }
+
+  if (weekdays.includes(day)) {
+    return weekdays.filter((d) => d !== day);
+  } else {
+    return [...weekdays, day];
+  }
+}

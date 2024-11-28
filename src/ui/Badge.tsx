@@ -37,9 +37,11 @@ const InfoBadge = styled(DefaultBadge)`
 
 interface BadgeProps {
   bg?: "primary" | "secondary" | "success" | "warning" | "error" | "info";
+  onClick: (event: React.MouseEvent<HTMLBaseElement>) => void;
 }
 
 function Badge({
+  onClick,
   bg = "primary",
   children,
   ...rest
@@ -66,7 +68,11 @@ function Badge({
       StyledBadge = PrimaryBadge;
   }
 
-  return <StyledBadge {...rest}>{children}</StyledBadge>;
+  return (
+    <StyledBadge onClick={onClick} {...rest}>
+      {children}
+    </StyledBadge>
+  );
 }
 
 export default Badge;
