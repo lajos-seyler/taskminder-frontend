@@ -1,3 +1,19 @@
+## 0.7.0 (2024-11-28)
+
+### Feat
+
+- add OccurrencesInput to EditTaskForm
+- implement OccurrencesInput functionality
+- implement TimeRangeInput functionality
+
+### Fix
+
+- overflow-y from scroll to auto
+
+### Refactor
+
+- remove console.log
+
 ## 0.6.0 (2024-11-24)
 
 ### Feat
