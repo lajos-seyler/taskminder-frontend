@@ -69,8 +69,6 @@ export default function OccurrencesInput({
 }: OccurrencesInputParams) {
   const [isRepeating, setIsRepeating] = useState<boolean>(false);
 
-  console.log(byweekday);
-
   const handleWeekdayClick = (weekdayNumber: number) => {
     setByweekday((prevWeekdays) => toggleWeekday(prevWeekdays, weekdayNumber));
   };
