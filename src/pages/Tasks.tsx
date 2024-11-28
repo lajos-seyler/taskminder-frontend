@@ -21,7 +21,7 @@ const StyledRow = styled(Row)`
 
 const ScrollableCol = styled(Col)`
   height: 100%;
-  overflow-y: scroll;
+  overflow-y: auto;
 `;
 
 function Tasks() {
