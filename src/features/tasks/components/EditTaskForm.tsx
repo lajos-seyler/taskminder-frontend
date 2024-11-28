@@ -1,4 +1,5 @@
 import { useQueryClient } from "@tanstack/react-query";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { Form } from "react-bootstrap";
 import { Controller, SubmitHandler, useForm } from "react-hook-form";
@@ -12,8 +13,10 @@ import { useUpdateTask } from "../hooks/useUpdateTask";
 import ProjectOption from "../interfaces/ProjectOption";
 import { TaskInput, TaskResponse } from "../interfaces/Task";
 import { convertTaskResponseToInput } from "../utils/tasks";
+import OccurrencesInput from "./OccurrencesInput";
 import ProjectInput from "./ProjectInput";
 import TagsInput from "./TagsInput";
+import TimeRangeInput from "./TimeRangeInput";
 
 const StyledEditTaskForm = styled(Form)`
   width: 100%;
@@ -34,16 +37,27 @@ interface EditTaskFormProps {
 }
 
 function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
+  const { data: projectPages } = useProjects();
   const { data: tagPages } = useTags();
+  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
+  const [selectedProject, setSelectedProject] = useState<ProjectOption | null>(
+    null,
+  );
+
+  const [startDate, setStartDate] = useState<string>("");
+  const [startTime, setStartTime] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
+  const [byweekday, setByweekday] = useState<number[]>([]);
+
+  const queryClient = useQueryClient();
+
   const tags: Tag[] | undefined = tagPages?.pages
     .flatMap((page) => page.results)
     .map((tag) => {
       return { label: tag.name, value: tag.id };
     });
-  const [selectedTags, setSelectedTags] = useState<Tag[]>([]);
-  const queryClient = useQueryClient();
 
-  const { data: projectPages } = useProjects();
   const projects: ProjectOption[] | undefined = projectPages?.pages
     .flatMap((page) => page.results)
     .map((project) => {
@@ -52,14 +66,12 @@ function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
         value: project.id,
       };
     });
-  const [selectedProject, setSelectedProject] = useState<ProjectOption | null>(
-    null,
-  );
 
   const { register, reset, control, handleSubmit } = useForm<TaskInput>({
     defaultValues: {
       title: task?.title,
       text: task?.text,
+      keep_occurrences: true,
     },
   });
 
@@ -94,8 +106,43 @@ function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
 
   const onSubmit: SubmitHandler<TaskInput> = function (data) {
     const tags = selectedTags.map((tag) => tag.value) as number[];
+
+    const startDateTime = `${startDate} ${startTime}`;
+    const endDateTime = `${endDate} ${endTime}`;
+
+    const startDateTimeIsValid = moment(
+      startDateTime,
+      "YYYY-MM-DD HH:mm",
+    ).isValid();
+    const endDateTimeIsValid = moment(
+      endDateTime,
+      "YYYY-MM-DD HH:mm",
+    ).isValid();
+
+    const taskData = {
+      ...data,
+      tags: tags,
+      project: selectedProject?.value || null,
+    };
+
+    if (startDateTimeIsValid && endDateTimeIsValid) {
+      taskData["start_time"] = startDateTime;
+      taskData["end_time"] = endDateTime;
+    }
+    if (data.rrule_params?.ends_on != "count") delete data.rrule_params?.count;
+    if (data.rrule_params?.ends_on != "date") delete data.rrule_params?.until;
+
+    if (typeof data.rrule_params?.interval === "string") {
+      data.rrule_params.interval = parseInt(data.rrule_params.interval);
+    }
+    if (typeof data.rrule_params?.count === "string") {
+      data.rrule_params.count = parseInt(data.rrule_params.count);
+    }
+
+    delete data.rrule_params?.ends_on;
+
     updateTaskMutation.mutate({
-      data: { ...data, tags, project: selectedProject?.value || null },
+      data: taskData,
       taskId: task.id,
     });
     onSaveNewTask();
@@ -139,6 +186,18 @@ function EditTaskForm({ onSaveNewTask, onCancel, task }: EditTaskFormProps) {
             setSelectedTags={setSelectedTags}
           />
         </Form.Group>
+        <hr />
+        <TimeRangeInput
+          setStartDate={setStartDate}
+          setStartTime={setStartTime}
+          setEndDate={setEndDate}
+          setEndTime={setEndTime}
+        />
+        <OccurrencesInput
+          register={register}
+          byweekday={byweekday}
+          setByweekday={setByweekday}
+        />
         <hr />
         <StyledFormButtonsDiv>
           <Button variant="error" onClick={onCancel}>

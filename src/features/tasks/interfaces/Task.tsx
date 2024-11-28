@@ -24,6 +24,7 @@ export default interface Task {
 export interface TaskInput extends Task {
   project: number | null;
   tags: number[];
+  keep_occurrences: boolean;
 }
 
 export interface TaskResponse extends Task {

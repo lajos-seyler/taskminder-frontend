@@ -164,6 +164,14 @@ export default function OccurrencesInput({
           </StyledRepeatEndsContainer>
         </Form.Group>
       )}
+      <Form.Group>
+        <Form.Check
+          type="switch"
+          id="keep-occurrences"
+          label="Keep current occurrences"
+          {...register("keep_occurrences")}
+        />
+      </Form.Group>
     </>
   );
 }
